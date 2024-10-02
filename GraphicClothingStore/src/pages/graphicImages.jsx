@@ -1,48 +1,70 @@
-// src/ImageSelector.jsx
 import React, { useState } from 'react';
 
-const images = [
-  { id: 1, src: 'img1', alt: 'Image 1 text' },
-  { id: 2, src: 'img2', alt: 'Image 2 text' },
-  { id: 3, src: 'img3', alt: 'Image 3 text' },
-  { id: 4, src: 'img4', alt: 'Image 4 text' },
-];
-
+// Use Vite's import.meta.glob to import images dynamically
+const images = import.meta.glob('/public/images/**/*.{jpg,jpeg,png,gif}');
 
 const ImageSelector = () => {
   const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedFolder, setSelectedFolder] = useState('');
+
+  // Group images by folders
+  const imagesByFolder = {};
+  for (const path in images) {
+    const folder = path.split('/')[3]; // Assuming folders are directly under /public/images
+    if (!imagesByFolder[folder]) {
+      imagesByFolder[folder] = [];
+    }
+    imagesByFolder[folder].push({ path, image: images[path] });
+  }
+  const folders = Object.keys(imagesByFolder);
+
+  const handleFolderChange = (event) => {
+    setSelectedFolder(event.target.value);
+    setSelectedImage(null); // Reset selected image when folder changes
+  };
 
   const handleImageClick = (image) => {
     setSelectedImage(image);
   };
 
-  // Displays a title and list of images
   return (
     <div style={{ textAlign: 'center' }}>
-      <h2>Select an Image</h2>
-      <div style={{ display: 'flex', justifyContent: 'center', gap: '10px' }}> 
-        {/* creates img tag element for each image in the images array */}
-        {images.map((image) => (
-          <img
-            key={image.id}
-            src={image.src}
-            alt={image.alt}
-            onClick={() => handleImageClick(image)}
-            // shows blue border around selected image
-            style={{
-              cursor: 'pointer',
-              border: selectedImage?.id === image.id ? '2px solid blue' : 'none',
-              width: '150px',
-              height: '150px',
-            }}
-          />
+      <h2>Select a Folder</h2>
+      <select onChange={handleFolderChange} value={selectedFolder}>
+        <option value="">--Select a Folder--</option>
+        {folders.map((folder) => (
+          <option key={folder} value={folder}>
+            {folder}
+          </option>
         ))}
-      </div>
-      {/* shows selected image and message */}
+      </select>
+
+      {selectedFolder && (
+        <>
+          <h2>Select an Image</h2>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', flexWrap: 'wrap' }}>
+            {imagesByFolder[selectedFolder].map(({ path, image }) => (
+              <img
+                key={path}
+                src={image} // Use the imported image
+                alt={path} // Use the path as alt text
+                onClick={() => handleImageClick(image)}
+                style={{
+                  cursor: 'pointer',
+                  border: selectedImage === image ? '2px solid blue' : 'none',
+                  width: '150px',
+                  height: '150px',
+                }}
+              />
+            ))}
+          </div>
+        </>
+      )}
+
       {selectedImage && (
         <div style={{ marginTop: '20px' }}>
           <h3>You selected:</h3>
-          <img src={selectedImage.src} alt={selectedImage.alt} style={{ width: '150px', height: '150px' }} />
+          <img src={selectedImage} alt="Selected" style={{ width: '150px', height: '150px' }} />
         </div>
       )}
     </div>
@@ -50,4 +72,3 @@ const ImageSelector = () => {
 };
 
 export default ImageSelector;
-
