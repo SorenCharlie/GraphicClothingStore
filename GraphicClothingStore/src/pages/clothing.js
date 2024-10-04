@@ -1,17 +1,32 @@
-const { Link } = require("react-router-dom");
+import React,  {  useState } from 'react';
 
-function MyClothingItems() {
-    const clothingItems = [
-        {id: 1, name: 'T-shirt', price: 20, size: 'S', color: 'black', design: 'image'},
-        {id: 2, name: 'Sweatshirt', price: 40, size: 'M', color: 'gray', design: 'image'},
-        {id: 3, name: 'Hoodie', price: 50, size: 'L', color: 'blue', design: 'image'},
-    ];
-    // const clothingItems = clothingItems.map((item) => {
-    //     return (
-    //         <li key={item.id}>
-    //             <Link to={`/clothing/${item.id}`}>{item.name}</Link>
-    //         </li>
-    //     );
+ const GraphcClothingShop = () => {
+  const [ step , setStep ] = useState(1);
+  const [selectedClothing, setSelectedClothing] = useState({
+    type: '',
+    color: '',
+    size: '',
+  });
+  const [slectedGraphic, setSelectedGraphics] = useState("");
+  const [cart, setCart] = useState([]);
+
+  const clothingOptions = {
+    types: ['T-shirt', 'Hoodie', 'Sweatshirt'],
+    colors: ['Black', 'White', 'Blue', 'Red', 'Yellow'],
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+  };
+
+  const graphicsOptions = [
+    'Graphic 1',
+    'Graphic 2',
+    'Graphic 3',
+    'Graphic 4',
+    'Graphic 5',
+  ];
+
+  const handleClothingSelect = (e) => {
+    const { name, value } = e.Target: 
+
   return (
     <>
         <button><Link to="/home">Design Your Own!</Link>
