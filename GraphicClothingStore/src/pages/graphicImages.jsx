@@ -32,9 +32,9 @@ const ImageSelector = () => {
   // renders dropdown for user to select a folder
   return (
     <div style={{ textAlign: 'center' }}>
-      <h2>Select a Folder</h2>
+      <h2>Choose your graphics</h2>
       <select onChange={handleFolderChange} value={selectedFolder}>
-        <option value="">--Select a Folder--</option>
+        <option value="">Choose a Fandom</option>
         {folders.map((folder) => (
           <option key={folder} value={folder}>
             {folder}
@@ -45,7 +45,7 @@ const ImageSelector = () => {
       {selectedFolder && (
         <>
           {/* Once a folder is selected, the images in that folder are displayed */}
-          <h2>Select an Image</h2>
+          <h2>Choose an Image</h2>
           <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', flexWrap: 'wrap' }}>
             {imagesByFolder[selectedFolder].map(({ path, image }) => (
               <img
@@ -72,6 +72,7 @@ const ImageSelector = () => {
         </div>
       )}
     </div>
+    
   );
 };
 

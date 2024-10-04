@@ -1,76 +1,123 @@
+// src/ClothingSelector.js
+
 import React, { useState } from 'react';
 
-// Use Vite's import.meta.glob to import images dynamically
-const images = import.meta.glob('/src/images/**/*.{jpg,jpeg,png,gif}');
+const clothingOptions = [
+  { type: 'Tshirt', img: './src/clothes/tshirt.png' },
+  { type: 'Sweater', img: 'src/clothes/sweatshirt.png' },
+  { type: 'Hoodie', img: './src/clothes/hoodie.png' },
+];
+
+const colors = ['Red', 'Blue', 'Green', 'Black', 'White'];
+const sizes = ['XS', 'S', 'M', 'L', 'XL'];
 
 const ClothingSelector = () => {
-  // track selected image and folder
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [selectedFolder, setSelectedFolder] = useState('');
+  const [selectedType, setSelectedType] = useState('');
+  const [selectedColor, setSelectedColor] = useState('');
+  const [selectedSize, setSelectedSize] = useState('');
 
-  // Group images by folders
-  const imagesByFolder = {};
-  for (const path in images) {
-    const folder = path.split('/')[3]; 
-    if (!imagesByFolder[folder]) {
-      imagesByFolder[folder] = [];
-    }
-    imagesByFolder[folder].push({ path, image: images[path] });
-  }
-  const folders = Object.keys(imagesByFolder);
-
-  const handleFolderChange = (event) => {
-    setSelectedFolder(event.target.value);
-    setSelectedImage(null); // Reset selected image when folder changes
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    alert(`Selected: ${selectedType}, ${selectedColor}, ${selectedSize}`);
   };
 
-  // sets selected image when image is clicked
-  const handleImageClick = (image) => {
-    setSelectedImage(image);
+  const dropdownStyle = {
+    position: 'relative',
+    display: 'inline-block',
   };
 
-  // renders dropdown for user to select a folder
+  const dropdownContentStyle = {
+    display: 'none',
+    position: 'absolute',
+    backgroundColor: 'black',
+    minWidth: '160px',
+    zIndex: 1,
+    border: '1px solid #ccc',
+  };
+
+  const dropdownVisibleStyle = {
+    ...dropdownContentStyle,
+    display: 'block',
+  };
+
+  const dropdownItemStyle = {
+    padding: '10px',
+    display: 'flex',
+    alignItems: 'center',
+    cursor: 'pointer',
+  };
+
+  const dropdownImageStyle = {
+    width: '20px',
+    height: '20px',
+    marginRight: '10px',
+  };
+
   return (
-    <div style={{ textAlign: 'center' }}>
-      <h2>Select a Folder</h2>
-      <select onChange={handleFolderChange} value={selectedFolder}>
-        <option value="">--Select a Folder--</option>
-        {folders.map((folder) => (
-          <option key={folder} value={folder}>
-            {folder}
-          </option>
-        ))}
-      </select>
-
-      {selectedFolder && (
-        <>
-          {/* Once a folder is selected, the images in that folder are displayed */}
-          <h2>Select an Image</h2>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', flexWrap: 'wrap' }}>
-            {imagesByFolder[selectedFolder].map(({ path, image }) => (
-              <img
-                key={path}
-                src={path} // Use the imported image
-                alt={path} // Use the path as alt text
-                onClick={() => handleImageClick(path)}
-                style={{
-                  cursor: 'pointer',
-                  border: selectedImage === path ? '2px solid white' : 'none',
-                  width: '150px',
-                  height: '150px',
+    <div>
+      <h1>Clothing Option Selector</h1>
+      <form onSubmit={handleSubmit}>
+        <div style={dropdownStyle}>
+          <label>
+            Clothing Type:
+            <div>
+              <button
+                type="button"
+                className="dropbtn"
+                style={{ backgroundColor: '#222', padding: '10px', width: '100%', textAlign: 'center' }}
+                onClick={(e) => {
+                  const dropdown = e.currentTarget.nextElementSibling;
+                  dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
                 }}
-              />
-            ))}
-          </div>
-        </>
-      )}
-
-      {selectedImage && (
-        <div style={{ marginTop: '20px' }}>
-          <h3>You selected:</h3>
-          <img src={selectedImage} alt="Selected" style={{ width: '150px', height: '150px' }} />
+              >
+                {selectedType || 'Select Type'}
+              </button>
+              <div style={dropdownContentStyle}>
+                {clothingOptions.map((option) => (
+                  <div
+                    key={option.type}
+                    style={dropdownItemStyle}
+                    onClick={() => {
+                      setSelectedType(option.type);
+                      document.querySelector('.dropdown-content').style.display = 'none'; // Hide dropdown after selection
+                    }}
+                  >
+                    <img src={option.img} alt={option.type} style={dropdownImageStyle} />
+                    {option.type}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </label>
         </div>
-      )}
+        <div>
+          <label>
+            Color:
+            <select value={selectedColor} onChange={(e) => setSelectedColor(e.target.value)}>
+              <option value="">Select Color</option>
+              {colors.map((color) => (
+                <option key={color} value={color}>
+                  {color}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+        <div>
+          <label>
+            Size:
+            <select value={selectedSize} onChange={(e) => setSelectedSize(e.target.value)}>
+              <option value="">Select Size</option>
+              {sizes.map((size) => (
+                <option key={size} value={size}>
+                  {size}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+        <button type="submit">Submit</button>
+      </form>
     </div>
   );
 };
