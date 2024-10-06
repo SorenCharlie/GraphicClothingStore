@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import GraphicClothingShop from './pages/clothing';
 import './App.css'
 import React from 'react';
 import ImageSelector from './pages/graphicImages';
@@ -20,7 +20,8 @@ function App() {
     <ThemeProvider theme={themeOptions}>
       <div className="App">
         <div>
-          <Accordion>
+          <ClothingSelector />
+          {/* <Accordion>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1-content"
@@ -59,7 +60,7 @@ function App() {
               <Button>Cancel</Button>
               <Button>Agree</Button>
             </AccordionActions>
-          </Accordion>
+          </Accordion> */}
         </div>
       </div>
     </ThemeProvider>

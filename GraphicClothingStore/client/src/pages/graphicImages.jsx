@@ -32,7 +32,7 @@ const ImageSelector = () => {
   // renders dropdown for user to select a folder
   return (
     <div style={{ textAlign: 'center' }}>
-      <h2>Choose your graphics</h2>
+      {/* <h2>Choose your graphics</h2> */}
       <select onChange={handleFolderChange} value={selectedFolder}>
         <option value="">Choose a Fandom</option>
         {folders.map((folder) => (
