@@ -15,13 +15,13 @@ import { themeOptions } from './themes/ThemeOptions';
 import { ThemeProvider } from '@mui/material';
 
 function App() {
-graphic-images
 
   return (
     <ThemeProvider theme={themeOptions}>
       <div className="App">
         <div>
-          <Accordion>
+          <ClothingSelector />
+          {/* <Accordion>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1-content"
@@ -60,7 +60,7 @@ graphic-images
               <Button>Cancel</Button>
               <Button>Agree</Button>
             </AccordionActions>
-          </Accordion>
+          </Accordion> */}
         </div>
       </div>
     </ThemeProvider>
