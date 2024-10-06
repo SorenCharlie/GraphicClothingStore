@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import GraphicClothingShop from './pages/clothing';
 import './App.css'
 import React from 'react';
 import ImageSelector from './pages/graphicImages';
@@ -15,6 +15,7 @@ import { themeOptions } from './themes/ThemeOptions';
 import { ThemeProvider } from '@mui/material';
 
 function App() {
+graphic-images
 
   return (
     <ThemeProvider theme={themeOptions}>

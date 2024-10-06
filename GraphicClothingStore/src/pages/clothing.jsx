@@ -1,125 +1,174 @@
-// src/ClothingSelector.js
+import React,  {  useState } from 'react';
+// Graphic Clothing Shop Component declaration
+ const GraphicClothingShop = () => {
+  const [ step, setStep ] = useState(1);
+  const [selectedClothing, setSelectedClothing] = useState({
+    type: " ",
+    color: "",
+    size: " ",
+  });
+  const [selectedGraphics, setSelectedGraphics] = useState(" ");
+  const [cart, setCart] = useState([]);
 
-import React, { useState } from 'react';
-
-const clothingOptions = [
-  { type: 'Tshirt', img: './src/clothes/tshirt.png' },
-  { type: 'Sweater', img: 'src/clothes/sweatshirt.png' },
-  { type: 'Hoodie', img: './src/clothes/hoodie.png' },
-];
-
-const colors = ['Red', 'Blue', 'Green', 'Black', 'White'];
-const sizes = ['XS', 'S', 'M', 'L', 'XL'];
-
-const ClothingSelector = () => {
-  const [selectedType, setSelectedType] = useState('');
-  const [selectedColor, setSelectedColor] = useState('');
-  const [selectedSize, setSelectedSize] = useState('');
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    alert(`Selected: ${selectedType}, ${selectedColor}, ${selectedSize}`);
+  // Clothing Options and Selections
+  const clothingOptions = {
+    types: ['T-shirt', 'Hoodie', 'Sweatshirt'],
+    colors: ['Black', 'White', 'Blue', 'Red', 'Yellow'],
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
   };
 
-  const dropdownStyle = {
-    position: 'relative',
-    display: 'inline-block',
+  const graphicsOptions = [
+    'Graphic 1',
+    'Graphic 2',
+    'Graphic 3',
+    'Graphic 4',
+    'Graphic 5',
+  ];
+// Handling Selection (what happens when a user selects a clothing option)
+  const handleClothingSelect = (e) => {
+    const { name, value } = e.target; 
+    setSelectedClothing({...selectedClothing, [name]: value });
   };
+// Hanlding Graphic Selection (what happens when a user selects a graphic)
+    const handleGraphicSelect = (graphic) => {
+      setSelectedGraphics(graphic);
+    };
+// Handling Cart Addition (what happens when a user adds an item to the cart)
+    const handleAddToCart = () => {
+      const item ={...selectedClothing, graphic: selectedGraphics};
+      // modify handleAddToCart to handle item updates
+      if (editIndex !== null) {
+     //when the user is updating an item edit the item in the cart
+     const updateCart = cart.map((cartItem, index) => 
+          index === editIndex ? item : cartItem);
+      setCart(updateCart);
+      setEditIndex(null);            // Reset the edit index
+      }else{
+        setCart([...cart, item]);   // Add the new item to the cart
+      }
+      setStep(3);                  // Proceed to checkout
+    };
+// Handling Item Removal (what happens when a user removes an item from the cart)
+const handleRemoveItem = (index) => {
+  const updatedCart = cart.filter((_, i) => i !== index);
+  setCart(updatedCart);
+};
+// Handling Item Update (what happens when a user updates an item in the cart)
+    const handleUpdateItem = (index) => {
+      setSelectedClothing(cart[index]);  //Load current item
+      setStep(1); // Go back to step 1
+      setEditIndex(index); // Set the index of the item being edited
+    };
+}
 
-  const dropdownContentStyle = {
-    display: 'none',
-    position: 'absolute',
-    backgroundColor: 'black',
-    minWidth: '160px',
-    zIndex: 1,
-    border: '1px solid #ccc',
-  };
-
-  const dropdownVisibleStyle = {
-    ...dropdownContentStyle,
-    display: 'block',
-  };
-
-  const dropdownItemStyle = {
-    padding: '10px',
-    display: 'flex',
-    alignItems: 'center',
-    cursor: 'pointer',
-  };
-
-  const dropdownImageStyle = {
-    width: '20px',
-    height: '20px',
-    marginRight: '10px',
-  };
-
+// Handling Checkout (what happens when a user proceeds to checkout)
+    const handleCheckout = () => {
+      alert("Proceeding to Checkout");
+      // Add code to proceed to checkout
+    };
   return (
-    <div>
-      <h1>Clothing Option Selector</h1>
-      <form onSubmit={handleSubmit}>
-        <div style={dropdownStyle}>
-          <label>
-            Clothing Type:
-            <div>
-              <button
-                type="button"
-                className="dropbtn"
-                style={{ backgroundColor: '#222', padding: '10px', width: '100%', textAlign: 'center' }}
-                onClick={(e) => {
-                  const dropdown = e.currentTarget.nextElementSibling;
-                  dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
-                }}
-              >
-                {selectedType || 'Select Type'}
-              </button>
-              <div style={dropdownContentStyle}>
-                {clothingOptions.map((option) => (
-                  <div
-                    key={option.type}
-                    style={dropdownItemStyle}
-                    onClick={() => {
-                      setSelectedType(option.type);
-                      document.querySelector('.dropdown-content').style.display = 'none'; // Hide dropdown after selection
-                    }}
-                  >
-                    <img src={option.img} alt={option.type} style={dropdownImageStyle} />
-                    {option.type}
+    <div className='shop-container'>
+      <h1>Welcome to Fandem! Your Graphic Clothing Shop!</h1>
+      <div className="steps">
+      
+{/* Step 1: Clothing Selection */}
+      {step === 1 && ( 
+        <div className="step1">
+        <h2>Select Your Clothing</h2>
+        <label>
+          Type:
+          <select 
+            name ="type"
+            value={selectedClothing.type}
+            onChange={handleClothingSelect}>
+            <option value="">Select Type</option>
+            {clothingOptions.types.map((type, index) => (
+              <option key={index} value={type}>
+                {type}
+              </option>
+            ))}
+          </select>
+        </label>
+{/*Color Selection */}
+         <label> 
+          Color:
+          <select 
+          name="color"
+          value={selectedClothing.color}
+          onChange={handleClothingSelect}
+          >
+            <option value="">Select Color</option>
+            {clothingOptions.colors.map((color, index) => (
+              <option key={index} value={color}>
+                {color}
+              </option>
+            ))}
+          </select>
+        </label>   
+{/* Size Selection */}
+        <label>
+          Size:
+          <select 
+          name="size"
+          value={selectedClothing.size}
+          onChange={handleClothingSelect}
+          >
+            <option value="">Select Size</option>
+            {clothingOptions.sizes.map((size, index) => (
+              <option key={index} value={size}>
+                {size}
+              </option>
+            ))}
+          </select>
+        </label>
+        <button onClick={() => setStep(2)}>Next: Select Graphics</button>
+        </div>
+      )}
+
+ {/* Step 2 Graphic Selection */} 
+      {step === 2 && (
+        <div className="step2">
+          <h2>Select a Graphic</h2>
+          <div className="graphics-grid">
+            {graphicsOptions.map((graphic, index) => (
+              <div
+                key={index}
+                className={`graphic-item ${
+                  selectedGraphics === graphic ? "selected" : ""}`}
+                onClick={() => handleGraphicSelect(graphic)}>
+                  <img src={`path-to-image/${graphic}.jpg`} alt={graphic} /> 
+                  <p>{graphic}</p>
                   </div>
                 ))}
+          </div>
+          <button onClick={handleAddToCart}>Add to Cart & Checkout</button>
+        </div>
+      )}
+{/* Step 3 Checkout */}
+      {step === 3 && (
+        <div className="step3">
+          <h2>Checkout</h2>
+          <div className="cart-items">
+            {cart.map((item, index) => (
+              <div key={index}>
+                <p>
+                  {item.type} - {item.color} - {item.size} - Graphic:{" "}
+                  {item.graphic}
+                </p>
+  {/* Update button */}
+                <button onClick={() => handleUpdateItem(index)}>Update</button>   
+  {/* Remove button */}
+                <button onClick={() => handleRemoveItem(index)}>Remove</button>
               </div>
-            </div>
-          </label>
+            ))}
+          </div>
+          <button onClick={handleCheckout}>Checkout</button>
         </div>
-        <div>
-          <label>
-            Color:
-            <select value={selectedColor} onChange={(e) => setSelectedColor(e.target.value)}>
-              <option value="">Select Color</option>
-              {colors.map((color) => (
-                <option key={color} value={color}>
-                  {color}
-                </option>
-              ))}
-            </select>
-          </label>
-        </div>
-        <div>
-          <label>
-            Size:
-            <select value={selectedSize} onChange={(e) => setSelectedSize(e.target.value)}>
-              <option value="">Select Size</option>
-              {sizes.map((size) => (
-                <option key={size} value={size}>
-                  {size}
-                </option>
-              ))}
-            </select>
-          </label>
-        </div>
-        <button type="submit">Submit</button>
-      </form>
+      )}
+    </div>
     </div>
   );
-};
 
-export default ClothingSelector;
+
+
+export default GraphicClothingShop;
