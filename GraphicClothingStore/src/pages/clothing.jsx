@@ -3,7 +3,7 @@ import React,  {  useState } from 'react';
  const GraphicClothingShop = () => {
   const [ step, setStep ] = useState(1);
   const [selectedClothing, setSelectedClothing] = useState({
-    type: " ",
+    type: "",
     color: "",
     size: " ",
   });
