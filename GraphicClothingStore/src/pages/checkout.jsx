@@ -1,3 +1,4 @@
+import { useLocation } from 'react-router-dom';
 import React, { useState } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
@@ -25,7 +26,7 @@ const CheckoutForm = ({ totalAmount }) => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ amount: totalAmount * 100 }), // Sending total in cents
+      body: JSON.stringify({ amount: Math.round(totalAmount * 100) }), // Sending total in cents
     });
 
     if (!response.ok) {
@@ -63,20 +64,27 @@ const CheckoutForm = ({ totalAmount }) => {
     </form>
   );
 };
-
 const CheckoutPage = () => {
-  // TODO: Fetch or access cart items here
-  const cartItems = [/* Replace with logic to get cart items */];
-  
-  // Calculate the total amount based on cart items
-  const totalAmount = cartItems.reduce((total, item) => total + item.price * item.quantity, 0); // Calculate total amount
+  const location = useLocation();
+  const { cartItems, total } = location.state || { cartItems: [], total: 0 };
 
   return (
     <div className="checkout-page">
       <h1>Checkout</h1>
-      {/* TODO: Add an order summary component here */}
+      <div className="order-summary">
+        <h2>Order Summary</h2>
+        {cartItems.map((item, index) => (
+          <div key={index} className="cart-item">
+            <span>{item.type} - {item.color} - {item.size}</span>
+            <span>Graphic: {item.graphic}</span>
+          </div>
+        ))}
+        <div className="total">
+          <strong>Total: ${total.toFixed(2)}</strong>
+        </div>
+      </div>
       <Elements stripe={stripePromise}>
-        <CheckoutForm totalAmount={totalAmount} /> {/* Pass total amount to CheckoutForm */}
+        <CheckoutForm totalAmount={total} />
       </Elements>
     </div>
   );

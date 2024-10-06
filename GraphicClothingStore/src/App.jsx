@@ -6,7 +6,7 @@ import './App.css'
 // Import components
 import Header from './components/header';
 import Footer from './components/footer';
-import ClothingPage from './pages/clothing';
+import GraphicClothingShop from './pages/clothing';
 import GraphicImagesPage from './pages/graphicImages';
 import CheckoutPage from './pages/checkout';
 
@@ -18,7 +18,7 @@ function App() {
       <div className="App">
         <Header />
         <Routes>
-          <Route path="/" element={<ClothingPage />} />
+        <Route path="/" element={<GraphicClothingShop />} />
           <Route path="/graphic-images" element={<GraphicImagesPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
         </Routes>
