@@ -36,9 +36,31 @@ import React,  {  useState } from 'react';
 // Handling Cart Addition (what happens when a user adds an item to the cart)
     const handleAddToCart = () => {
       const item ={...selectedClothing, graphic: selectedGraphics};
-      setCart([...cart, item]);
-      setStep(3);
+      // modify handleAddToCart to handle item updates
+      if (editIndex !== null) {
+     //when the user is updating an item edit the item in the cart
+     const updateCart = cart.map((cartItem, index) => 
+          index === editIndex ? item : cartItem);
+      setCart(updateCart);
+      setEditIndex(null);            // Reset the edit index
+      }else{
+        setCart([...cart, item]);   // Add the new item to the cart
+      }
+      setStep(3);                  // Proceed to checkout
     };
+// Handling Item Removal (what happens when a user removes an item from the cart)
+const handleRemoveItem = (index) => {
+  const updatedCart = cart.filter((_, i) => i !== index);
+  setCart(updatedCart);
+};
+// Handling Item Update (what happens when a user updates an item in the cart)
+    const handleUpdateItem = (index) => {
+      setSelectedClothing(cart[index]);  //Load current item
+      setStep(1); // Go back to step 1
+      setEditIndex(index); // Set the index of the item being edited
+    };
+}
+
 // Handling Checkout (what happens when a user proceeds to checkout)
     const handleCheckout = () => {
       alert("Proceeding to Checkout");
@@ -46,7 +68,7 @@ import React,  {  useState } from 'react';
     };
   return (
     <div className='shop-container'>
-      <h1>Welcome to our Graphic Clothing SHop!</h1>
+      <h1>Welcome to Fandem! Your Graphic Clothing Shop!</h1>
       <div className="steps">
       
 {/* Step 1: Clothing Selection */}
@@ -114,7 +136,7 @@ import React,  {  useState } from 'react';
                 className={`graphic-item ${
                   selectedGraphics === graphic ? "selected" : ""}`}
                 onClick={() => handleGraphicSelect(graphic)}>
-                  <img src={`path-to-image/${graphic}.jpg`} alt={graphic} />
+                  <img src={`path-to-image/${graphic}.jpg`} alt={graphic} /> 
                   <p>{graphic}</p>
                   </div>
                 ))}
@@ -133,6 +155,10 @@ import React,  {  useState } from 'react';
                   {item.type} - {item.color} - {item.size} - Graphic:{" "}
                   {item.graphic}
                 </p>
+  {/* Update button */}
+                <button onClick={() => handleUpdateItem(index)}>Update</button>   
+  {/* Remove button */}
+                <button onClick={() => handleRemoveItem(index)}>Remove</button>
               </div>
             ))}
           </div>
@@ -142,7 +168,7 @@ import React,  {  useState } from 'react';
     </div>
     </div>
   );
-};
+
 
 
 export default GraphicClothingShop;
