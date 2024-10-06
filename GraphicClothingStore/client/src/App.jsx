@@ -13,14 +13,45 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Button from '@mui/material/Button';
 import { themeOptions } from './themes/ThemeOptions';
 import { ThemeProvider } from '@mui/material';
+import { Outlet } from 'react-router-dom';
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloProvider,
+  createHttpLink,
+} from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
+
+
+const httpLink = createHttpLink({
+  uri: '/graphql',
+});
+
+const authLink = setContext((_, { headers }) => {
+  const token = localStorage.getItem('id_token');
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : '',
+    },
+  };
+});
+
+const client = new ApolloClient({
+  link: authLink.concat(httpLink),
+  cache: new InMemoryCache(),
+});
+
 
 function App() {
 
   return (
+    <ApolloProvider client={client}>
     <ThemeProvider theme={themeOptions}>
       <div className="App">
         <div>
-          <ClothingSelector />
+          <Outlet />
+          {/* <ClothingSelector /> */}
           {/* <Accordion>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
@@ -64,6 +95,7 @@ function App() {
         </div>
       </div>
     </ThemeProvider>
+    </ApolloProvider>
   );
 }
 
