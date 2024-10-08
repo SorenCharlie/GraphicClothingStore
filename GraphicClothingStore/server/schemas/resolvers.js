@@ -104,7 +104,38 @@ const resolvers = {
       const token = signToken(user);
 
       return { token, user };
-    }
+    },
+    // updateCart: async (parent, { userId, itemId, quantity }, context) => {
+    //   if (context.user) {
+    //     const cart = await Cart.findOne({ userId });
+    //     if (!cart) {
+    //       throw new Error('Cart not found');
+    //     }
+
+    //     const itemIndex = cart.items.findIndex(item => item.itemId === itemId);
+    //     if (itemIndex === -1) {
+    //       throw new Error('Item not found in cart');
+    //     }
+
+    //     // Update the quantity of the item
+    //     cart.items[itemIndex].quantity = quantity;
+    //     await cart.save();
+    //     return cart;
+    //   }
+
+    //   throw new AuthenticationError('Not authenticated');
+    // },
+    // deleteCart: async (parent, { userId }, context) => {
+    //   if (context.user) {
+    //     const result = await Cart.findOneAndDelete({ userId });
+    //     if (!result) {
+    //       throw new Error('Cart not found or already deleted');
+    //     }
+    //     return { success: true, message: 'Cart deleted successfully' };
+    //   }
+
+    //   throw new AuthenticationError('Not authenticated');
+    // },
   }
 };
 
