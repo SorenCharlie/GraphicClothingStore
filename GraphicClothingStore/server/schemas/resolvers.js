@@ -82,10 +82,6 @@ const resolvers = {
       throw AuthenticationError;
     },
 
-  //  updateOrder: async (_, { type, color, size, graphics, price }) => {
-  //     const clothing = new Clothing({ type, color, size, graphics, price });
-  //     return await clothing.save();
-  // },
     updateUser: async (parent, args, context) => {
       if (context.user) {
         return await User.findByIdAndUpdate(context.user._id, args, { new: true });
