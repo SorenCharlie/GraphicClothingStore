@@ -1,6 +1,7 @@
 const { User, Order } = require('../models');
 const { signToken, AuthenticationError } = require('../utils/auth');
-const stripe = require('stripe')('sk_test_4eC39HqLyjWDarjtT1zdp7dc');
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+   
 
 const resolvers = {
   Query: {
@@ -70,17 +71,6 @@ const resolvers = {
 
       return { token, user };
     },
-    addOrder: async (parent, { products }, context) => {
-      if (context.user) {
-        const order = new Order({ products });
-
-        await User.findByIdAndUpdate(context.user._id, { $push: { orders: order } });
-
-        return order;
-      }
-
-      throw AuthenticationError;
-    },
     updateUser: async (parent, args, context) => {
       if (context.user) {
         return await User.findByIdAndUpdate(context.user._id, args, { new: true });
@@ -105,20 +95,31 @@ const resolvers = {
 
       return { token, user };
     },
-    updateOrder: async (parent, { userId, itemId, quantity }, context) => {
+    addOrder: async (parent, { products }, context) => {
       if (context.user) {
-        const order = await Order.findOne({ userId });
+        const order = new Order({ products });
+
+        await User.findByIdAndUpdate(context.user._id, { $push: { orders: order } });
+
+        return order;
+      }
+
+      throw AuthenticationError;
+    },
+    updateOrder: async (parent, { userId, productId, quantity }, context) => {
+      if (context.user) {
+        const order = await Order.findOne({ orderId });
         if (!order) {
           throw new Error('Orrder not found');
         }
 
-        const itemIndex = order.items.findIndex(item => item.itemId === itemId);
-        if (itemIndex === -1) {
-          throw new Error('Item not found in order');
+        const productIndex = order.products.findIndex(product => product.productId === productId);
+        if (productIndex === -1) {
+          throw new Error('Product not found in order');
         }
 
-        // Update the quantity of the item
-        order.items[itemIndex].quantity = quantity;
+        // Update the quantity of the product
+        order.products[productIndex].quantity = quantity;
         await order.save();
         return order;
       }
