@@ -22,6 +22,7 @@ const typeDefs = `
 
   type Checkout {
     session: ID
+    sessionId: ID
   }
 
   type Auth {
@@ -48,6 +49,7 @@ const typeDefs = `
     addOrder(products: [ID]!): Order
     updateUser(username: String, email: String, password: String): User
     login(email: String!, password: String!): Auth
+    createCheckoutSession(items: [ClothingInput]!): Checkout
   }
 `;
 
