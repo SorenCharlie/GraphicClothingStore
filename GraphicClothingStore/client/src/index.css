@@ -25,11 +25,51 @@ a:hover {
 body {
   margin: 0;
   display: flex;
-  place-items: center;
+ flex-direction: column;
+  align-items: center;
   min-width: 320px;
   min-height: 100vh;
+  font-size: 16px;
 }
+/* New styles for dropdown selects on mobile */
+select {
+  display: block;
+  width: 80%; /* Adjust this value as needed */
+  max-width: 300px; /* Adjust this value as needed */
+  margin: 10px auto;
+  padding: 10px;
+  font-size: 16px; /* Larger font size for better touch targets */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #333;
+}
+/* Tablet styles */
+@media screen and (min-width: 768px) {
+  body {
+    font-size: 16px;
+  }
 
+  h1 {
+    font-size: 2.8em;
+  }
+
+  button {
+    padding: 0.7em 1.4em;
+  }
+/* Reset select styles for larger screens if needed */
+select {
+  width: auto;
+  max-width: none;
+  margin: 0;
+}
+/* For Material-UI selects */
+.MuiSelect-root {
+  width: 80%;
+  max-width: 300px;
+  margin: 10px auto;
+}
+}
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
@@ -53,69 +93,6 @@ button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
-
-
-
-/* Mobile styles (default) */
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-  font-size: 14px;
-}
-
-h1 {
-  font-size: 2.4em;
-  line-height: 1.1;
-}
-
-/* Tablet styles */
-@media screen and (min-width: 768px) {
-  body {
-    font-size: 16px;
-  }
-
-  h1 {
-    font-size: 2.8em;
-  }
-
-  button {
-    padding: 0.7em 1.4em;
-  }
-}
-
-/* Desktop styles */
-@media screen and (min-width: 1024px) {
-  body {
-    font-size: 18px;
-  }
-
-  h1 {
-    font-size: 3.2em;
-  }
-
-  button {
-    padding: 0.8em 1.6em;
-  }
-}
-
-/* Large desktop styles */
-@media screen and (min-width: 1440px) {
-  body {
-    font-size: 20px;
-  }
-
-  h1 {
-    font-size: 3.6em;
-  }
-}
-
-
-
-
-
 
 @media (prefers-color-scheme: light) {
   :root {
