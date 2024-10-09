@@ -1,6 +1,6 @@
 const { User, Order } = require('../models');
 const { signToken, AuthenticationError } = require('../utils/auth');
-const stripe = require('stripe')('sk_test_4eC39HqLyjWDarjtT1zdp7dc');
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY); // Use environment variable for secret key
 
 const resolvers = {
   Query: {
@@ -16,7 +16,7 @@ const resolvers = {
         return user;
       }
 
-      throw AuthenticationError;
+      throw new AuthenticationError('You need to be logged in!');
     },
     order: async (parent, { _id }, context) => {
       if (context.user) {
@@ -28,39 +28,41 @@ const resolvers = {
         return user.orders.id(_id);
       }
 
-      throw AuthenticationError;
+      throw new AuthenticationError('You need to be logged in!');
     },
     checkout: async (parent, args, context) => {
       const url = new URL(context.headers.referer).origin;
+
+      // Create a new order in the database
       await Order.create({ products: args.products.map(({ _id }) => _id) });
-      // eslint-disable-next-line camelcase
-      const line_items = [];
 
-      // eslint-disable-next-line no-restricted-syntax
-      for (const product of args.products) {
-        line_items.push({
-          price_data: {
-            currency: 'usd',
-            product_data: {
-              name: product.name,
-              description: product.description,
-              images: [`${url}/images/${product.image}`]
-            },
-            unit_amount: product.price * 100,
+      const line_items = args.products.map(product => ({
+        price_data: {
+          currency: 'usd',
+          product_data: {
+            name: product.name,
+            description: product.description,
+            images: [`${url}/images/${product.image}`]
           },
-          quantity: product.purchaseQuantity,
+          unit_amount: product.price * 100, // Convert to cents
+        },
+        quantity: product.purchaseQuantity,
+      }));
+
+      try {
+        const session = await stripe.checkout.sessions.create({
+          payment_method_types: ['card'],
+          line_items,
+          mode: 'payment',
+          success_url: `${url}/success?session_id={CHECKOUT_SESSION_ID}`,
+          cancel_url: `${url}/`,
         });
+
+        return { session: session.id };
+      } catch (error) {
+        console.error('Error creating checkout session:', error);
+        throw new Error('Unable to create checkout session');
       }
-
-      const session = await stripe.checkout.sessions.create({
-        payment_method_types: ['card'],
-        line_items,
-        mode: 'payment',
-        success_url: `${url}/success?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${url}/`,
-      });
-
-      return { session: session.id };
     },
   },
   Mutation: {
@@ -79,32 +81,32 @@ const resolvers = {
         return order;
       }
 
-      throw AuthenticationError;
+      throw new AuthenticationError('You need to be logged in!');
     },
     updateUser: async (parent, args, context) => {
       if (context.user) {
         return await User.findByIdAndUpdate(context.user._id, args, { new: true });
       }
 
-      throw AuthenticationError;
+      throw new AuthenticationError('You need to be logged in!');
     },
     login: async (parent, { email, password }) => {
       const user = await User.findOne({ email });
 
       if (!user) {
-        throw AuthenticationError;
+        throw new AuthenticationError('No user found with this email!');
       }
 
       const correctPw = await user.isCorrectPassword(password);
 
       if (!correctPw) {
-        throw AuthenticationError;
+        throw new AuthenticationError('Incorrect password!');
       }
 
       const token = signToken(user);
 
       return { token, user };
-    }
+    },
   }
 };
 
