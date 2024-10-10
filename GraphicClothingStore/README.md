@@ -34,7 +34,7 @@ Soren:
 For any questions, please email sorenr2209@gmail.com.
 
 Kobie:
-For any questions, please email robertskobie2gmail.com
+For any questions, please email robertskobie@gmail.com
 
 Wilmert:
 For any questions, please email
