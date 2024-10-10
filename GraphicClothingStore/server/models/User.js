@@ -33,6 +33,16 @@ userSchema.pre('save', async function(next) {
   next();
 });
 
+userSchema.pre(["updateOne", "findByIdAndUpdate", "findOneAndUpdate"], async function (next) {
+
+  const data = this.getUpdate();
+  if (data.password) {
+      data.password = await bcrypt.hash(data.password, 12);
+  }
+  next()
+
+});
+
 // compare the incoming password with the hashed password
 userSchema.methods.isCorrectPassword = async function(password) {
   return await bcrypt.compare(password, this.password);

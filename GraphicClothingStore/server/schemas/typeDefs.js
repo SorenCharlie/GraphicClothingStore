@@ -46,9 +46,26 @@ const typeDefs = `
 
   type Mutation {
     addUser(username: String!, email: String!, password: String!): Auth
-    addOrder(products: [ID]!): Order
+    addOrder(products: [ClothingInput]!): Order
     updateUser(username: String, email: String, password: String): User
     login(email: String!, password: String!): Auth
+    updateOrder(userId: ID!, itemId: ID!, quantity: Int!): Cart
+    deleteOrder(userId: ID!): Response
+  }
+
+  type Cart {
+    userId: ID
+    items: [CartItem]
+  }
+
+  type CartItem {
+    itemId: ID
+    quantity: Int
+  }
+
+  type Response {
+    success: Boolean
+    message: String
     createCheckoutSession(items: [ClothingInput]!): Checkout
   }
 `;
