@@ -108,14 +108,14 @@ const resolvers = {
 
       throw AuthenticationError;
     },
-    updateOrder: async (parent, { userId, productId, quantity }, context) => {
+    updateOrder: async (parent, { userId, orderId, products }, context) => {
       if (context.user) {
-        const order = await Order.findOne({ orderId });
+        const order = await Order.findById(orderId);
         if (!order) {
           throw new Error('Orrder not found');
         }
 
-        const productIndex = order.products.findIndex(product => product.productId === productId);
+        const productIndex = order.products.findIndex(product => product._id.toString() === productId);
         if (productIndex === -1) {
           throw new Error('Product not found in order');
         }
@@ -126,7 +126,7 @@ const resolvers = {
         return order;
       }
 
-      throw new AuthenticationError('Not authenticated');
+      throw AuthenticationError;
     },
     deleteOrder: async (parent, { userId }, context) => {
       if (context.user) {
@@ -137,7 +137,7 @@ const resolvers = {
         return { success: true, message: 'Order deleted successfully' };
       }
 
-      throw new AuthenticationError('Not authenticated');
+      throw AuthenticationError;
     },
   }
 };
