@@ -4,6 +4,7 @@ import ImageSelector from './graphicImages';
 // Graphic Clothing Shop Component declaration
 const GraphicClothingShop = () => {
   const [step, setStep] = useState(1);
+  const [editIndex, setEditIndex] = useState(null);
   const [selectedClothing, setSelectedClothing] = useState({
     type: "",
     color: "",

@@ -22,6 +22,7 @@ const typeDefs = `
 
   type Checkout {
     session: ID
+    sessionId: ID
   }
 
   type Auth {
@@ -65,6 +66,7 @@ const typeDefs = `
   type Response {
     success: Boolean
     message: String
+    createCheckoutSession(items: [ClothingInput]!): Checkout
   }
 `;
 
