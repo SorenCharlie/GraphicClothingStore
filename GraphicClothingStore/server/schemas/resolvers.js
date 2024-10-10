@@ -16,7 +16,7 @@ const resolvers = {
         return user;
       }
 
-      throw new AuthenticationError('You need to be logged in!');
+      throw AuthenticationError;
     },
     order: async (parent, { _id }, context) => {
       if (context.user) {
@@ -28,7 +28,7 @@ const resolvers = {
         return user.orders.id(_id);
       }
 
-      throw new AuthenticationError('You need to be logged in!');
+      throw AuthenticationError;
     },
     checkout: async (parent, args, context) => {
       const url = new URL(context.headers.referer).origin;
@@ -81,7 +81,7 @@ const resolvers = {
         return order;
       }
 
-      throw new AuthenticationError('You need to be logged in!');
+      throw AuthenticationError;
     },
 
     updateUser: async (parent, args, context) => {
@@ -89,19 +89,19 @@ const resolvers = {
         return await User.findByIdAndUpdate(context.user._id, args, { new: true });
       }
 
-      throw new AuthenticationError('You need to be logged in!');
+      throw AuthenticationError;
     },
     login: async (parent, { email, password }) => {
       const user = await User.findOne({ email });
 
       if (!user) {
-        throw new AuthenticationError('No user found with this email!');
+        throw AuthenticationError;
       }
 
       const correctPw = await user.isCorrectPassword(password);
 
       if (!correctPw) {
-        throw new AuthenticationError('Incorrect password!');
+        throw AuthenticationError;
       }
 
       const token = signToken(user);

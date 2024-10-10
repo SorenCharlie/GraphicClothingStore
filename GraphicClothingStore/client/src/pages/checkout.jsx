@@ -4,7 +4,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import { CREATE_CHECKOUT_SESSION } from '../utils/mutations';
 import { useLocation } from 'react-router-dom';
 
-const stripePromise = loadStripe('pk_live_51Q61ApRtvPeX49hMt08RptOVSeQf9P8eHdvktYJvoiHBppVd0LCWNGhu5R9SqHTE6vLNCvA62Xkhvu2amACwsHbm00sMCgyL3F');
+const stripePromise = loadStripe(process.env.STRIPE_SECRET_KEY);
 
 const Checkout = () => {
   const location = useLocation();

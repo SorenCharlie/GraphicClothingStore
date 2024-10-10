@@ -58,7 +58,7 @@ function App() {
               aria-controls="panel1-content"
               id="panel1-header"
             >
-              Select Clothing
+              About Us
             </AccordionSummary>
             <AccordionDetails>
               <ClothingSelector />
@@ -70,7 +70,7 @@ function App() {
               aria-controls="panel2-content"
               id="panel2-header"
             >
-              Select Graphics
+              How it works
             </AccordionSummary>
             <AccordionDetails>
               <ImageSelector />
@@ -85,12 +85,9 @@ function App() {
               Checkout
             </AccordionSummary>
             <AccordionDetails>
-              <h2>Here is the checkout</h2>
+              <h2>Pick your Clothing!</h2>
             </AccordionDetails>
-            <AccordionActions>
-              <Button>Cancel</Button>
-              <Button>Agree</Button>
-            </AccordionActions>
+            <Outlet />
           </Accordion> */}
         </div>
       </div>
