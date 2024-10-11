@@ -1,5 +1,6 @@
 const typeDefs = `
   type Clothing {
+    _id: ID
     type: String
     color: String
     size: String
@@ -9,6 +10,7 @@ const typeDefs = `
 
   type Order {
     _id: ID
+    userId: ID
     purchaseDate: String
     products: [Clothing]
   }
@@ -49,24 +51,24 @@ const typeDefs = `
     addOrder(products: [ClothingInput]!): Order
     updateUser(username: String, email: String, password: String): User
     login(email: String!, password: String!): Auth
-    updateOrder(userId: ID!, itemId: ID!, quantity: Int!): Cart
+    updateOrder(userId: ID!, orderId: ID!, itemId: ID!, type: String!): Order
     deleteOrder(userId: ID!): Response
   }
 
-  type Cart {
+  type Order {
     userId: ID
-    items: [CartItem]
+    products: [Clothing]
   }
 
-  type CartItem {
-    itemId: ID
+  type OrderItem {
+    orderId: ID
     quantity: Int
   }
 
   type Response {
     success: Boolean
     message: String
-    createCheckoutSession(items: [ClothingInput]!): Checkout
+    createCheckoutSession(products: [ClothingInput]!): Checkout
   }
 `;
 
