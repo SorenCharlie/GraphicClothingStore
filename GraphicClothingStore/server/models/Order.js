@@ -9,7 +9,12 @@ const orderSchema = new Schema({
     type: Date,
     default: Date.now
   },
-  products: [clothingSchema]
+  products: [clothingSchema],
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: 'User', 
+    required: true 
+  }
 });
 
 const Order = mongoose.model('Order', orderSchema);
