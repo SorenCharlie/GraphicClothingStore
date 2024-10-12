@@ -51,7 +51,7 @@ const typeDefs = `
     addOrder(products: [ClothingInput]!): Order
     updateUser(username: String, email: String, password: String): User
     login(email: String!, password: String!): Auth
-    updateOrder(userId: ID!, orderId: ID!, itemId: ID!, type: String!): Order
+    updateOrder(orderId: ID!, productId: ID!, type: String): User
     deleteOrder(userId: ID!): Response
   }
 
