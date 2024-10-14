@@ -51,8 +51,8 @@ const typeDefs = `
     addOrder(products: [ClothingInput]!): Order
     updateUser(username: String, email: String, password: String): User
     login(email: String!, password: String!): Auth
-    updateOrder(orderId: ID!, productId: ID!, type: String): User
-    deleteOrder(userId: ID!): Response
+    updateOrder(orderId: ID!, products: [ClothingInput]): User
+    deleteOrder(userId: ID!, orderId: ID!): Response
   }
 
   type Order {
@@ -68,7 +68,6 @@ const typeDefs = `
   type Response {
     success: Boolean
     message: String
-    createCheckoutSession(products: [ClothingInput]!): Checkout
   }
 `;
 
