@@ -108,115 +108,39 @@ const resolvers = {
 
       throw AuthenticationError;
     },
-    updateOrder: async (parent, { userId, orderId, productId, type }, context) => {
-      try {
-        let updateOrder = await User.findOneAndUpdate(
-          { "orders._id": orderId },
-          { $set: { orders: { products: { _id: productId, type} } } },
-          { new: true }
-        )
-        console.log('updateOrder:', updateOrder);
-        return updateOrder;
-      } catch (error) {
-        console.error('Error in updateOrder resolver:', error);
-        throw error;
+    // tutor with Andres 38 minutes 15 seconds
+    updateOrder: async (parent, { orderId, products }, context) => {
+      if(context.user) {
+        try {
+          let updateOrder = await User.findOneAndUpdate(
+            { "orders._id": orderId },
+            { $set: { orders: { products: products } } },
+            { new: true }
+          )
+          console.log('updateOrder:', updateOrder);
+          return updateOrder;
+          
+          // let updateOrder = await User.findOneAndUpdate(
+          //   { "orders._id": orderId },
+          //   { $set: { orders: { products: { _id: productId, type} } } },
+          //   { new: true }
+          // )
+          // console.log('updateOrder:', updateOrder);
+          // return updateOrder;
+        } catch (error) {
+          console.error('Error in updateOrder resolver:', error);
+          throw error;
+        } 
       }
-      // if (context.user) {
-      //   const order = await Order.findById(orderId);
-      //   if (!order) {
-      //     throw new Error('Order not found');
-      //   }
-
-      //   const productIndex = order.products.findIndex(product => product._id.toString() === productId);
-      //   if (productIndex === -1) {
-      //     throw new Error('Product not found in order');
-      //   }
-
-      //   // Update the quantity of the product
-      //   order.products[productIndex].type = type;
-      //   await order.save();
-      //   return order;
-      // }
-
-      // if (context.user) {
-      //   // First, find the user by userId
-      //   const user = await User.findById(userId);
-      //   if (!user) {
-      //     throw new Error('User not found');
-      //   }
-      //   console.log('Found user:', user._id);
-
-      //   // find the order by orderId
-      //   const order = await Order.findById(orderId);
-      //   if (!order) {
-      //     throw new Error('Order not found');
-      //   }
-
-      //   // Check if the order belongs to the user
-      //   if (order.userId.toString() !== userId) {
-      //     console.log('Found order:', order);
-      //     throw new Error('Order does not belong to the user');
-      //   }
-
-      //   const productIndex = order.products.findIndex(product => product._id.toString() === productId);
-      //   if (productIndex === -1) {
-      //     throw new Error('Product not found in order');
-      //   }
-
-      //   // Update the type of the product
-      //   order.products[productIndex].type = type;
-      //   await order.save();
-      //   return order;
-      // }
-      //     console.log('updateOrder resolver called');
-      // try {
-      //   if (!context.user) {
-      //     console.log('No user in context');
-      //     throw new AuthenticationError('Must be logged in');
-      //   }
-
-      //   console.log('Updating order:', { userId, orderId, productId, type });
-
-      //   // First, find the user by userId
-      //   const user = await User.findById(userId);
-      //   console.log('User query result:', user);
-      //   if (!user) {
-      //     console.log('User not found');
-      //     throw new Error('User not found');
-      //   }
-
-      //   // Now find the order by orderId
-      //   const order = await Order.findById(orderId);
-      //   console.log('Order query result:', order);
-      //   if (!order) {
-      //     console.log('Order not found');
-      //     throw new Error('Order not found');
-      //   }
-
-      //   const productIndex = order.products.findIndex(product => product._id.toString() === productId);
-      //   console.log('Product index:', productIndex);
-      //   if (productIndex === -1) {
-      //     console.log('Product not found in order');
-      //     throw new Error('Product not found in order');
-      //   }
-
-      //   // Update the type of the product
-      //   order.products[productIndex].type = type;
-      //   const savedOrder = await order.save();
-      //   console.log('Order saved:', savedOrder);
-      //   return savedOrder;
-
-      // } catch (error) {
-      //   console.error('Error in updateOrder resolver:', error);
-      //   throw error;
-      // }
-
-
       throw AuthenticationError;
     },
-    deleteOrder: async (parent, { userId }, context) => {
+    deleteOrder: async (parent, { userId, orderId }, context) => {
       if (context.user) {
-        const result = await Order.findOneAndDelete({ userId });
+        let result = await User.findOneAndUpdate(
+          { _id: userId },
+          { $pull: { orders: { _id: orderId } } },
+          { new: true }
+        )
         if (!result) {
           throw new Error('Order not found or already deleted');
         }
