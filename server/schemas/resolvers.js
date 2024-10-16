@@ -119,14 +119,6 @@ const resolvers = {
           )
           console.log('updateOrder:', updateOrder);
           return updateOrder;
-          
-          // let updateOrder = await User.findOneAndUpdate(
-          //   { "orders._id": orderId },
-          //   { $set: { orders: { products: { _id: productId, type} } } },
-          //   { new: true }
-          // )
-          // console.log('updateOrder:', updateOrder);
-          // return updateOrder;
         } catch (error) {
           console.error('Error in updateOrder resolver:', error);
           throw error;

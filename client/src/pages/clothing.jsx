@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ImageSelector from './graphicImages';
+import { useNavigate } from "react-router-dom";
+import Auth from '../utils/auth';
 
 // Graphic Clothing Shop Component declaration
 const GraphicClothingShop = () => {
@@ -27,6 +29,14 @@ const GraphicClothingShop = () => {
     'Graphic 4',
     'Graphic 5',
   ];
+  const navigate = useNavigate();
+
+  useEffect(function(){
+
+    if (!Auth.loggedIn()) {
+      navigate('/login');
+    };
+  },[]);
   // Handling Selection (what happens when a user selects a clothing option)
   const handleClothingSelect = (e) => {
     const { name, value } = e.target;
