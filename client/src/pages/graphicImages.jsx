@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-
 // Use Vite's import.meta.glob to import images dynamically
 const images = import.meta.glob('/src/images/**/*.{jpg,jpeg,png,gif}');
 
